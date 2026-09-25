@@ -34,9 +34,23 @@ export default function BillingScreen({
   const [showPrintModal, setShowPrintModal] = useState(null);
   const [stockWarning, setStockWarning] = useState(null);
 
+  // Delete product from catalog state
+  const [productToDelete, setProductToDelete] = useState(null);
+
   // Add new product state
   const [showAddProductModal, setShowAddProductModal] = useState(false);
   const [addItemSuccessMsg, setAddItemSuccessMsg] = useState('');
+
+  const handleDeleteProductFromCatalog = (productId) => {
+    const target = products.find(p => p.id === productId);
+    const updated = products.filter(p => p.id !== productId).map((p, idx) => ({ ...p, srNo: idx + 1 }));
+    if (onUpdateProducts) {
+      onUpdateProducts(updated);
+    }
+    setCart(prev => prev.filter(item => item.id !== productId));
+    setAddItemSuccessMsg(`Stock item "${target?.name || ''}" deleted from catalog.`);
+    setTimeout(() => setAddItemSuccessMsg(''), 4000);
+  };
   const [newProdForm, setNewProdForm] = useState({
     name: '',
     brand: 'Ponkathir',
@@ -503,16 +517,31 @@ export default function BillingScreen({
                         </span>
                       </div>
 
-                      {soldQty > 0 ? (
-                        <span className="text-[10px] font-bold text-amber-300 bg-amber-950/80 border border-amber-700/80 px-2 py-0.5 rounded-md flex items-center gap-1 shrink-0">
-                          <Flame className="w-3 h-3 text-amber-400" />
-                          <span>{soldQty} sold</span>
-                        </span>
-                      ) : (
-                        <span className="text-[10px] text-slate-500 bg-slate-900/80 border border-slate-800 px-1.5 py-0.5 rounded shrink-0">
-                          0 sold
-                        </span>
-                      )}
+                      <div className="flex items-center gap-1.5">
+                        {soldQty > 0 ? (
+                          <span className="text-[10px] font-bold text-amber-300 bg-amber-950/80 border border-amber-700/80 px-2 py-0.5 rounded-md flex items-center gap-1 shrink-0">
+                            <Flame className="w-3 h-3 text-amber-400" />
+                            <span>{soldQty} sold</span>
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-slate-500 bg-slate-900/80 border border-slate-800 px-1.5 py-0.5 rounded shrink-0">
+                            0 sold
+                          </span>
+                        )}
+
+                        {/* Delete Stock Button */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setProductToDelete(product);
+                          }}
+                          className="p-1 text-slate-500 hover:text-rose-400 hover:bg-rose-950/60 rounded-md transition sm:opacity-0 group-hover:opacity-100 focus:opacity-100 opacity-70 border border-transparent hover:border-rose-800/40"
+                          title={`Delete "${product.name}" from catalog`}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
 
                     {/* Product Title & Weight */}
@@ -1059,6 +1088,75 @@ export default function BillingScreen({
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Stock Item Confirmation Modal */}
+      {productToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-slate-900 border border-rose-500/40 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
+            <div className="flex items-start gap-3.5">
+              <div className="p-3 bg-rose-500/20 text-rose-400 rounded-xl border border-rose-500/30 shrink-0">
+                <Trash2 className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">Delete Stock Item?</h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  Are you sure you want to permanently remove this stock item from the catalog?
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-4 space-y-2 text-xs">
+              <div className="flex justify-between">
+                <span className="text-slate-400">Product:</span>
+                <span className="font-bold text-white text-right">{productToDelete.name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Brand:</span>
+                <span className="text-teal-300 font-semibold">{productToDelete.brand}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Weight / Unit:</span>
+                <span className="text-slate-200 font-mono font-semibold">{productToDelete.weight}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Selling Price:</span>
+                <span className="text-emerald-400 font-bold">₹{productToDelete.mrp}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Available Stock:</span>
+                <span className={`font-extrabold ${productToDelete.currentStock <= 0 ? 'text-rose-400' : 'text-amber-400'}`}>
+                  {productToDelete.currentStock} units
+                </span>
+              </div>
+            </div>
+
+            <p className="text-[11px] text-slate-400 bg-slate-800/40 p-2.5 rounded-lg border border-slate-700/50">
+              Past completed bills containing this item will keep their transaction history, but this item will be removed from the billing counter and catalog.
+            </p>
+
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setProductToDelete(null)}
+                className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  handleDeleteProductFromCatalog(productToDelete.id);
+                  setProductToDelete(null);
+                }}
+                className="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-rose-950 transition flex items-center justify-center gap-1.5"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>Confirm Delete</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
