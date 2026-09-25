@@ -290,6 +290,41 @@ export default function AdminScreen({
     );
   };
 
+  // Reset all products' stock counts to 0 (nothing in stock)
+  const handleResetAllStocksToZero = () => {
+    if (confirm('Are you sure you want to reset all product stock quantities to 0 (nothing in stock)? Product names and prices will remain intact.')) {
+      const zeroed = products.map(p => ({
+        ...p,
+        openingQty: 0,
+        alreadySoldYesterday: 0,
+        currentStock: 0,
+        needsQtySetup: true
+      }));
+      onUpdateProducts(zeroed);
+      setEditedProducts(prev => prev.map(p => ({
+        ...p,
+        openingQty: 0,
+        alreadySoldYesterday: 0,
+        currentStock: 0,
+        needsQtySetup: true
+      })));
+      setSelectedStockIds([]);
+      setSaveSuccessMsg('All product stocks have been reset to 0 (nothing in stock).');
+      setTimeout(() => setSaveSuccessMsg(''), 4000);
+    }
+  };
+
+  // Delete all products from catalog
+  const handleClearAllProducts = () => {
+    if (confirm('WARNING: Are you sure you want to delete ALL stock items from the catalog? This will completely empty your inventory catalog!')) {
+      onUpdateProducts([]);
+      setEditedProducts([]);
+      setSelectedStockIds([]);
+      setSaveSuccessMsg('All products have been deleted from catalog.');
+      setTimeout(() => setSaveSuccessMsg(''), 4000);
+    }
+  };
+
   // JSON Backup Import handler
   const handleRestoreJSON = (e) => {
     const file = e.target.files[0];
@@ -582,13 +617,24 @@ export default function AdminScreen({
               </p>
             </div>
 
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-lg shadow-teal-950 transition"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add Custom Product</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleResetAllStocksToZero}
+                className="px-3.5 py-2 bg-amber-950/80 hover:bg-amber-900 border border-amber-600/60 text-amber-300 font-bold text-xs rounded-xl flex items-center gap-1.5 shadow transition"
+                title="Reset stock counts of all products to 0"
+              >
+                <Ban className="w-3.5 h-3.5 text-amber-400" />
+                <span>Reset All Stocks to 0</span>
+              </button>
+
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-lg shadow-teal-950 transition"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add Custom Product</span>
+              </button>
+            </div>
           </div>
 
           {/* Search & Filters */}
@@ -909,7 +955,23 @@ export default function AdminScreen({
                 />
               </label>
 
-              <div className="pt-4 border-t border-slate-800">
+              <div className="pt-4 border-t border-slate-800 space-y-2.5">
+                <button
+                  onClick={handleResetAllStocksToZero}
+                  className="w-full py-2.5 px-3 bg-amber-950/60 hover:bg-amber-900/80 text-amber-300 border border-amber-700/60 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition"
+                >
+                  <Ban className="w-4 h-4 text-amber-400" />
+                  Reset All Stocks to 0 (Clear Quantities)
+                </button>
+
+                <button
+                  onClick={handleClearAllProducts}
+                  className="w-full py-2.5 px-3 bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/60 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition"
+                >
+                  <Trash2 className="w-4 h-4 text-rose-400" />
+                  Clear All Products (Empty Entire Catalog)
+                </button>
+
                 <button
                   onClick={() => {
                     if (confirm('WARNING: Are you sure you want to reset all data back to original seed defaults? This cannot be undone!')) {
@@ -917,7 +979,7 @@ export default function AdminScreen({
                       window.location.reload();
                     }
                   }}
-                  className="w-full py-2.5 px-3 bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/60 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition"
+                  className="w-full py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition"
                 >
                   <RefreshCw className="w-4 h-4" />
                   Reset Stall Data to Seed Defaults

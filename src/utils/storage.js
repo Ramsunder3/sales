@@ -19,7 +19,24 @@ const DEFAULT_STALL_INFO = {
 
 export const getProducts = () => {
   try {
+    const resetKey = 'malayalee_club_stocks_reset_to_zero_v1';
+    const hasBeenReset = localStorage.getItem(resetKey);
     const data = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
+
+    if (!hasBeenReset) {
+      localStorage.setItem(resetKey, 'true');
+      const baseList = data ? JSON.parse(data) : INITIAL_PRODUCTS;
+      const zeroedList = baseList.map(p => ({
+        ...p,
+        openingQty: 0,
+        alreadySoldYesterday: 0,
+        currentStock: 0,
+        needsQtySetup: true
+      }));
+      localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(zeroedList));
+      return zeroedList;
+    }
+
     if (!data) {
       localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(INITIAL_PRODUCTS));
       return INITIAL_PRODUCTS;
@@ -115,4 +132,33 @@ export const resetToDefaults = () => {
   localStorage.setItem(STORAGE_KEYS.BILL_COUNTER, '1001');
   localStorage.setItem(STORAGE_KEYS.ADMIN_PIN, DEFAULT_PIN);
   localStorage.setItem(STORAGE_KEYS.STALL_INFO, JSON.stringify(DEFAULT_STALL_INFO));
+};
+
+export const resetAllStocksToZero = () => {
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
+    const list = data ? JSON.parse(data) : INITIAL_PRODUCTS;
+    const zeroed = list.map(p => ({
+      ...p,
+      openingQty: 0,
+      alreadySoldYesterday: 0,
+      currentStock: 0,
+      needsQtySetup: true
+    }));
+    localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(zeroed));
+    return zeroed;
+  } catch (e) {
+    console.error('Failed to reset stocks to zero:', e);
+    return INITIAL_PRODUCTS;
+  }
+};
+
+export const clearAllProducts = () => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify([]));
+    return [];
+  } catch (e) {
+    console.error('Failed to clear all products:', e);
+    return [];
+  }
 };
