@@ -49,7 +49,7 @@ export default function PrintReceiptModal({ bill, stallInfo, onClose }) {
               KRL CONSLOIDATES - MADIPAKKAM
             </div>
             <div className="text-center font-semibold text-[11px] text-slate-700">
-              (Chetpet Stall)
+              (Tamil Nadu Nair Service Society)
             </div>
             <div className="text-center text-[10px] text-slate-600 mb-2">
               FOOD STALL SALES RECEIPT
@@ -129,7 +129,7 @@ export default function PrintReceiptModal({ bill, stallInfo, onClose }) {
             className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg transition border border-emerald-400/30 text-xs"
           >
             <Share2 className="w-4 h-4 text-emerald-200" />
-            Share PDF Receipt to Customer
+            Share Receipt to Customer
           </button>
           
           <div className="grid grid-cols-3 gap-1.5">

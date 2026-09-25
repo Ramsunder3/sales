@@ -144,7 +144,7 @@ export const shareBillPDFToCustomer = async (bill, stallInfo, customPhone) => {
     try {
       await navigator.share({
         title: `KRL Consloidates Bill ${bill.billNo}`,
-        text: `Here is your receipt for Bill #${bill.billNo} from KRL Consloidates - Madipakkam (Chetpet Stall). Total: ₹${bill.grandTotal}`,
+        text: `Here is your receipt for Bill #${bill.billNo} from KRL Consloidates - Madipakkam ( TNNSS Madipakkam Onam Celebrations). Total: ₹${bill.grandTotal}`,
         files: [file]
       });
       return;
