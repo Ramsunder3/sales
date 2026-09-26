@@ -11,9 +11,9 @@ const STORAGE_KEYS = {
 const DEFAULT_PIN = '1234';
 
 const DEFAULT_STALL_INFO = {
-  stallName: 'KRL Consloidates - Madipakkam (Chetpet Stall)',
-  eventTitle: 'KRL Consloidates - Madipakkam (Chetpet Stall)',
-  location: 'Madipakkam / Chetpet, Chennai',
+  stallName: 'KRL Consolidates - Madipakkam ( TNNSS Madipakkam Onam Celebrations)',
+  eventTitle: 'KRL Consolidates - Madipakkam ( TNNSS Madipakkam Onam Celebrations)',
+  location: 'Madipakkam , Chennai',
   headerNote: 'Food & Gourmet Products Counter'
 };
 

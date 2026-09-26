@@ -183,7 +183,7 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base sm:text-lg font-extrabold text-white tracking-tight font-heading">
-                  KRL Consloidates - Madipakkam
+                  KRL Consolidates - Madipakkam
                 </h1>
                 <span className="bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
                   TNNSS Madipakkam Onam
@@ -310,7 +310,7 @@ export default function App() {
       <footer className="border-t border-slate-800/80 bg-slate-950 py-3 text-center text-slate-500 text-xs">
         <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-2">
           <div>
-            <strong>KRL Consloidates - Madipakkam (Tamil Nadu Nair Service Society)</strong> • Official Stall Billing & Inventory Software
+            <strong>KRL Consolidates - Madipakkam (Tamil Nadu Nair Service Society)</strong> • Official Stall Billing & Inventory Software
           </div>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
