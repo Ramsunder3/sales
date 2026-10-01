@@ -186,7 +186,8 @@ export default function App() {
                   KRL Consolidates - Madipakkam
                 </h1>
                 <span className="bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                  TNNSS Madipakkam Onam
+                  MKMS Onam Celebrations  02/10/2026
+                  St Thomas Orthodox Church Hall, Puzuthivakkm
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 font-medium hidden sm:block">

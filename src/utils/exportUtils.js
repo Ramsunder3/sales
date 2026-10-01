@@ -107,7 +107,7 @@ export const exportItemSalesCSV = (analyzedItems, dateRange = 'All Time') => {
 
 export const exportFullBackupJSON = (products, bills, stallInfo) => {
   const backupData = {
-    app: 'KRL Consloidates - Madipakkam (Chetpet Stall) Billing App',
+    app: 'KRL Consloidates - Madipakkam (MKMS Onam Celebrations  02/10/2026) Billing App',
     version: '1.0',
     exportedAt: new Date().toISOString(),
     products,

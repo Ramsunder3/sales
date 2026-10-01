@@ -11,8 +11,8 @@ const STORAGE_KEYS = {
 const DEFAULT_PIN = '1234';
 
 const DEFAULT_STALL_INFO = {
-  stallName: 'KRL Consolidates - Madipakkam ( TNNSS Madipakkam Onam Celebrations)',
-  eventTitle: 'KRL Consolidates - Madipakkam ( TNNSS Madipakkam Onam Celebrations)',
+  stallName: 'KRL Consolidates - Madipakkam ( MKMS Onam Celebrations  02/10/2026)',
+  eventTitle: 'KRL Consolidates - Madipakkam ( MKMS Onam Celebrations  02/10/2026)',
   location: 'Madipakkam , Chennai',
   headerNote: 'Food & Gourmet Products Counter'
 };
@@ -111,7 +111,7 @@ export const getStallInfo = () => {
     const data = localStorage.getItem(STORAGE_KEYS.STALL_INFO);
     if (!data) return DEFAULT_STALL_INFO;
     const parsed = JSON.parse(data);
-    if (parsed.stallName === 'KRL Consloidates Chetpet Stall' || !parsed.stallName?.includes('Madipakkam')) {
+    if (parsed.stallName === 'KRL Consloidates TNNSS Madipakkam Onam Celebrations' || !parsed.stallName?.includes('Madipakkam')) {
       parsed.stallName = DEFAULT_STALL_INFO.stallName;
       parsed.eventTitle = DEFAULT_STALL_INFO.eventTitle;
       localStorage.setItem(STORAGE_KEYS.STALL_INFO, JSON.stringify(parsed));
