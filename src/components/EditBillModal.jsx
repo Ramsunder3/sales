@@ -69,7 +69,7 @@ export default function EditBillModal({
     return items.reduce((sum, item) => sum + (item.rate * item.qty), 0);
   }, [items]);
 
-  // Payment mode & Grand Total calculation
+  // Grand Total calculation (Actual price without round off)
   const { grandTotal, totalDiscount, roundOffAmount, isCustomOverride } = useMemo(() => {
     if (customGrandTotal !== '' && !isNaN(parseFloat(customGrandTotal))) {
       const overrideVal = Math.max(0, parseFloat(customGrandTotal));
@@ -84,23 +84,13 @@ export default function EditBillModal({
     const manualDisc = parseFloat(discount) || 0;
     const afterManual = Math.max(0, subtotal - manualDisc);
 
-    if (paymentMode === 'Cash') {
-      const rounded = Math.floor(afterManual / 10) * 10;
-      return {
-        grandTotal: rounded,
-        totalDiscount: subtotal - rounded,
-        roundOffAmount: afterManual - rounded,
-        isCustomOverride: false
-      };
-    } else {
-      return {
-        grandTotal: afterManual,
-        totalDiscount: manualDisc,
-        roundOffAmount: 0,
-        isCustomOverride: false
-      };
-    }
-  }, [subtotal, discount, customGrandTotal, paymentMode]);
+    return {
+      grandTotal: afterManual,
+      totalDiscount: manualDisc,
+      roundOffAmount: 0,
+      isCustomOverride: false
+    };
+  }, [subtotal, discount, customGrandTotal]);
 
   // Real-time Inventory Impact Calculation (Comparing original bill vs edited items)
   const stockChanges = useMemo(() => {
@@ -592,17 +582,17 @@ export default function EditBillModal({
             </div>
           </div>
 
-          {/* Section 3: Financial Calculations & Rounding */}
+          {/* Section 3: Financial Calculations */}
           <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 space-y-2">
             <div className="flex justify-between text-xs text-slate-300">
               <span>Calculated Subtotal:</span>
               <span className="font-bold text-white">₹{subtotal}</span>
             </div>
 
-            {paymentMode === 'Cash' && !isCustomOverride && (
+            {totalDiscount > 0 && (
               <div className="flex justify-between text-xs text-teal-400">
-                <span>Cash Discount / Rounding:</span>
-                <span>-₹{roundOffAmount}</span>
+                <span>Discount:</span>
+                <span>-₹{totalDiscount}</span>
               </div>
             )}
 

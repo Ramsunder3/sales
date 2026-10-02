@@ -168,7 +168,7 @@ export default function BillingScreen({
     return cart.reduce((sum, item) => sum + (item.mrp * item.qty), 0);
   }, [cart]);
 
-  // Payment mode & Manual Price Override calculations:
+  // Manual Price Override & Grand Total calculations (Actual price without round off):
   const { grandTotal, totalDiscount, roundOffAmount, isCustomOverride } = useMemo(() => {
     // If counter staff typed a manual custom bill price override (e.g. 250)
     if (customGrandTotal !== '' && !isNaN(parseFloat(customGrandTotal))) {
@@ -184,24 +184,13 @@ export default function BillingScreen({
     const manualDisc = parseFloat(discount) || 0;
     const afterManual = Math.max(0, subtotal - manualDisc);
     
-    if (paymentMode === 'Cash') {
-      const rounded = Math.floor(afterManual / 10) * 10;
-      return {
-        grandTotal: rounded,
-        totalDiscount: subtotal - rounded,
-        roundOffAmount: afterManual - rounded,
-        isCustomOverride: false
-      };
-    } else {
-      // GPay / UPI / Card: Full exact amount without round off!
-      return {
-        grandTotal: afterManual,
-        totalDiscount: manualDisc,
-        roundOffAmount: 0,
-        isCustomOverride: false
-      };
-    }
-  }, [subtotal, discount, customGrandTotal, paymentMode]);
+    return {
+      grandTotal: afterManual,
+      totalDiscount: manualDisc,
+      roundOffAmount: 0,
+      isCustomOverride: false
+    };
+  }, [subtotal, discount, customGrandTotal]);
 
   const changeToReturn = useMemo(() => {
     const given = parseFloat(cashGiven) || 0;
@@ -804,26 +793,24 @@ export default function BillingScreen({
                   </div>
                 )}
 
-                {/* Subtotal & Payment Rounding Summary */}
+                {/* Subtotal & Payment Summary */}
                 <div className="space-y-1.5 pt-2 border-t border-slate-800 text-xs">
                   <div className="flex justify-between text-slate-400">
                     <span>Subtotal:</span>
                     <span className="font-semibold text-slate-200">₹{subtotal}</span>
                   </div>
 
-                  {!isCustomOverride && (
-                    paymentMode === 'Cash' ? (
-                      <div className="flex justify-between text-teal-400 font-semibold">
-                        <span>Discount:</span>
-                        <span>-₹{roundOffAmount}</span>
-                      </div>
-                    ) : (
-                      <div className="flex justify-between text-slate-400 text-[11px]">
-                        <span>Payment Mode:</span>
-                        <span className="text-emerald-400 font-semibold">{paymentMode} (Exact Amount)</span>
-                      </div>
-                    )
+                  {totalDiscount > 0 && (
+                    <div className="flex justify-between text-teal-400 font-semibold">
+                      <span>Discount:</span>
+                      <span>-₹{totalDiscount}</span>
+                    </div>
                   )}
+
+                  <div className="flex justify-between text-slate-400 text-[11px]">
+                    <span>Payment Mode:</span>
+                    <span className="text-emerald-400 font-semibold">{paymentMode}</span>
+                  </div>
 
                   {/* Manual Bill Price Override Option */}
                   <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-800/80">
