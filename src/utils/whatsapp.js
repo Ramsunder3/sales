@@ -11,7 +11,7 @@ export const generateWhatsAppBillMessage = (bill, stallInfo) => {
   const dateStr = new Date(bill.dateTime).toLocaleDateString('en-IN');
   const timeStr = new Date(bill.dateTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
-  let text = `🧾 *KRL CONSOLIDATES - MADIPAKKAM ( TNNSS Madipakkam Onam Celebrations)*\n`;
+  let text = `🧾 *KRL CONSOLIDATES - MADIPAKKAM ( MKMS Onam Celebrations  02/10/2026)*\n`;
   text += `*Stall Sales Receipt*\n`;
   text += `------------------------------------\n`;
   text += `*Bill No:* ${bill.billNo}\n`;
